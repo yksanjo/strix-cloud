@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  strix-cli:
+    build:
+      context: ..
+      dockerfile: strix/Dockerfile
+    image: strix/cli:latest
+    volumes:
+      - ./reports:/app/reports
+    command: tail -f /dev/null
+
+  strix-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=production
+      - PORT=8080
+    volumes:
+      - ./reports:/app/reports
+
+  strix-web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    ports:
+      - "3000:3000"
+    depends_on:
+      - strix-api
+    environment:
+      - API_URL=http://strix-api:8080
+
+  strix-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    environment:
+      - API_URL=http://strix-api:8080
+    depends_on:
+      - strix-api
+
+networks:
+  default:
+    name: strix-network

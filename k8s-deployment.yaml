@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: strix-api
+  labels:
+    app: strix-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: strix-api
+  template:
+    metadata:
+      labels:
+        app: strix-api
+    spec:
+      containers:
+      - name: strix-api
+        image: strix/api:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: NODE_ENV
+          value: "production"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: strix-api
+spec:
+  selector:
+    app: strix-api
+  ports:
+  - port: 8080
+    targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: strix-web
+  labels:
+    app: strix-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: strix-web
+  template:
+    metadata:
+      labels:
+        app: strix-web
+    spec:
+      containers:
+      - name: strix-web
+        image: strix/web:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: API_URL
+          value: "http://strix-api:8080"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "250m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: strix-web
+spec:
+  selector:
+    app: strix-web
+  ports:
+  - port: 80
+    targetPort: 3000
+  type: LoadBalancer
