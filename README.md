@@ -1,48 +1,82 @@
-# Strix Cloud
+# strix-cloud
 
-Cloud deployment for Security Recon in 60 seconds.
+## Detailed Description
 
-## Features
+strix-cloud is maintained as an industry-grade software project with production-ready engineering practices.  
+This repository includes documented setup, quality gates, operational guidance, and governance standards so contributors can safely build, test, and ship changes with confidence.
 
-- 🐳 Docker & Docker Compose support
-- ☸️ Kubernetes deployment manifests
-- 🔄 Scalable architecture
-- 🚀 Production-ready
+## Problem Statement
 
-## Quick Start with Docker Compose
+Describe the user or business problem this project solves, the target users, and expected outcomes.
+
+## Solution Overview
+
+Summarize the architecture, core modules, and runtime behavior at a high level.
+
+## Key Features
+
+- Clear project scope and intended use.
+- Reproducible local development workflow.
+- Test coverage and CI quality gates.
+- Security and contribution policies.
+- Deployment-ready repository structure.
+
+## Repository Structure
+
+```text
+.
+|-- src/                  # Core implementation
+|-- tests/                # Automated test suites
+|-- docs/                 # Design notes and operational docs
+|-- .github/workflows/    # CI pipelines
+|-- README.md
+|-- LICENSE
+|-- CONTRIBUTING.md
+|-- SECURITY.md
+|-- CODE_OF_CONDUCT.md
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Git
+- Project runtime/toolchain for this repo
+
+### Local Setup
 
 ```bash
-cd strix-cloud
-docker-compose up -d
+make test
+make lint
 ```
 
-## Kubernetes Deployment
+## Usage
 
-```bash
-kubectl apply -f k8s-deployment.yaml
-```
+Document primary commands, API routes, CLI examples, or UI workflows here.
 
-## Services
+## Quality Standards
 
-| Service | Port | Description |
-|---------|------|-------------|
-| strix-web | 3000 | Web UI |
-| strix-api | 8080 | REST API |
+- CI must pass before merge.
+- Changes require tests for critical behavior.
+- Security-sensitive changes should include risk notes.
+- Keep pull requests focused and reviewable.
 
-## Architecture
+## Security
 
-```
-┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│   strix-web │────▶│  strix-api  │────▶│ strix-worker│
-└─────────────┘     └─────────────┘     └─────────────┘
-```
+See `SECURITY.md` for responsible disclosure and handling guidelines.
 
-## Environment Variables
+## Contributing
 
-- `NODE_ENV` - Environment (production/development)
-- `PORT` - Server port
-- `API_URL` - API endpoint URL
+See `CONTRIBUTING.md` for branching, commit, and pull request expectations.
 
-## Volume Mounts
+## Roadmap
 
-- `./reports` - Scan reports output directory
+Track upcoming milestones, technical debt, and planned feature work.
+
+## Support
+
+Open a GitHub issue for bugs, feature requests, or documentation gaps.
+
+## License
+
+This project is released under the MIT License.
